@@ -1,19 +1,24 @@
-FROM ubuntu:bionic
+FROM ubuntu:xenial
 MAINTAINER Alexander Paul <alex.paul@wustl.edu>
 
 LABEL \
   version="0.0.1" \
   description="Image for interactive analysis"
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
+  apt-utils \
+  build-essential \
   bzip2 \
   curl \
   default-jdk \
   default-jre \
+  gcc-multilib \
   git \
   gzip \
   g++ \
+  jq \
   libbz2-dev \
+  libncurses5-dev \
   liblzma-dev \
   nodejs \
   perl \
@@ -23,6 +28,8 @@ RUN apt-get update && apt-get install -y \
   make \
   ncurses-dev \
   rsync \
+  tzdata \
+  unzip \
   vim \
   wget \
   zlib1g-dev && apt-get clean all
@@ -79,6 +86,21 @@ RUN wget https://github.com/broadinstitute/picard/releases/download/$PICARD_VERS
 #################
 RUN cpan install CPAN && \
   cpan YAML::XS File Cwd Text::CSV JSON
+
+#########
+# fgbio #
+#########
+ENV FGBIO_VERSION=1.1.0
+ENV FGBIO_INSTALL=/opt/fgbio.jar
+RUN wget https://github.com/fulcrumgenomics/fgbio/releases/download/1.1.0/fgbio-1.1.0.jar && \
+  mv fgbio-${FGBIO_VERSION}.jar $FGBIO_INSTALL && \
+  ln -s $FGBIO_INSTALL /usr/bin/fgbio && \
+  rm -rf /tmp
+
+# Define a timezone so Java works properly
+RUN ln -sf /usr/share/zoneinfo/America/Chicago /etc/localtime \
+    && echo "America/Chicago" > /etc/timezone \
+    && dpkg-reconfigure --frontend noninteractive tzdata
 
 WORKDIR /
 
