@@ -22,6 +22,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
   liblzma-dev \
   nodejs \
   perl \
+  python \
   python3 \
   python3-pip \
   locales \
@@ -69,7 +70,7 @@ RUN wget https://github.com/samtools/samtools/releases/download/$SAMTOOLS_VERSIO
 RUN pip3 install --upgrade pip && \
   pip install pyyaml unidecode 'setuptools>=18.5' cwltool 'ruamel.yaml==0.14.2'
 # default python3
-RUN ln -s /usr/bin/python3 /usr/bin/python
+RUN rm /usr/bin/python && ln -s /usr/bin/python3 /usr/bin/python
 
 ##########
 # picard #
