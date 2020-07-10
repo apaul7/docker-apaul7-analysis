@@ -103,6 +103,22 @@ RUN ln -sf /usr/share/zoneinfo/America/Chicago /etc/localtime \
     && echo "America/Chicago" > /etc/timezone \
     && dpkg-reconfigure --frontend noninteractive tzdata
 
+# add bamUtil,https://genome.sph.umich.edu/wiki/BamUtil#bamUtil_Overview
+ENV BAM_UTIL_VERSION=1.0.14
+ENV LIB_STAT_GEN_VERSION=1.0.14
+ENV BAM_UTIL_INSTALL=/opt/BamUtil
+RUN wget https://github.com/statgen/bamUtil/archive/v${BAM_UTIL_VERSION}.tar.gz && \
+    tar -zxvf v${BAM_UTIL_VERSION}.tar.gz && rm v${BAM_UTIL_VERSION}.tar.gz && \
+    wget https://github.com/statgen/libStatGen/archive/v${LIB_STAT_GEN_VERSION}.tar.gz && \
+    tar -zxvf v${LIB_STAT_GEN_VERSION}.tar.gz && rm v${LIB_STAT_GEN_VERSION}.tar.gz && \
+    mv libStatGen-${LIB_STAT_GEN_VERSION} libStatGen && \
+    cd bamUtil-${BAM_UTIL_VERSION} && \
+    make && \
+    make install INSTALLDIR=${BAM_UTIL_INSTALL} && \
+    rm -rf /tmp && \
+    ln -s ${BAM_UTIL_INSTALL}/bam /usr/bin/BamUtil
+
+
 WORKDIR /
 
 # r? r packages?
