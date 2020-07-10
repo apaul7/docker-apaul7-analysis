@@ -93,7 +93,7 @@ RUN cpan install CPAN && \
 #########
 ENV FGBIO_VERSION=1.1.0
 ENV FGBIO_INSTALL=/opt/fgbio.jar
-RUN wget https://github.com/fulcrumgenomics/fgbio/releases/download/1.1.0/fgbio-1.1.0.jar && \
+RUN wget https://github.com/fulcrumgenomics/fgbio/releases/download/${FGBIO_VERSION}/fgbio-${FGBIO_VERSION}.jar && \
   mv fgbio-${FGBIO_VERSION}.jar $FGBIO_INSTALL && \
   ln -s $FGBIO_INSTALL /usr/bin/fgbio && \
   rm -rf /tmp
