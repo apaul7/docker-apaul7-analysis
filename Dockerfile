@@ -68,7 +68,7 @@ RUN wget https://github.com/samtools/samtools/releases/download/$SAMTOOLS_VERSIO
 # python packages #
 ###################
 RUN pip3 install --upgrade pip && \
-  pip install pyyaml unidecode 'setuptools>=18.5' cwltool 'ruamel.yaml==0.14.2' PyVCF
+  pip install pyyaml unidecode 'setuptools>=18.5' cwltool 'ruamel.yaml==0.14.2' vcfpy
 # default python3
 RUN rm /usr/bin/python && ln -s /usr/bin/python3 /usr/bin/python
 
