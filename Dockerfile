@@ -139,7 +139,16 @@ RUN cpan install CPAN && \
 # python packages #
 ###################
 RUN pip3 install --upgrade pip && \
-  pip install pyyaml unidecode 'setuptools>=18.5' cwltool 'ruamel.yaml==0.14.2' vcfpy xlsxwriter
+  pip install \
+  cwltool \
+  pysam \
+  pyyaml \
+  'ruamel.yaml==0.14.2' \
+  'setuptools>=18.5' \
+  unidecode \
+  vcfpy \
+  xlsxwriter
+
 # default python3
 RUN rm /usr/bin/python && ln -s /usr/bin/python3 /usr/bin/python
 
