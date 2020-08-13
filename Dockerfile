@@ -2,7 +2,7 @@ FROM ubuntu:xenial
 MAINTAINER Alexander Paul <alex.paul@wustl.edu>
 
 LABEL \
-  version="0.0.1" \
+  version="1.0.0" \
   description="Image for interactive analysis"
 
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
@@ -18,6 +18,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
   g++ \
   jq \
   libbz2-dev \
+  libcurl4-openssl-dev \
   libncurses5-dev \
   liblzma-dev \
   nodejs \
@@ -36,7 +37,23 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
   zlib1g-dev && apt-get clean all
 
 RUN locale-gen --no-purge en_US.UTF-8 
+
+RUN mkdir /opt/jars
+
 WORKDIR /tmp
+
+##########
+# HTSLIB #
+##########
+ENV HTSLIB_VERSION=1.10.2
+ENV HTSLIB_INSTALL=/opt/htslib/
+RUN wget https://github.com/samtools/htslib/releases/download/$HTSLIB_VERSION/htslib-$HTSLIB_VERSION.tar.bz2 && \
+    tar --bzip2 -xf htslib-$HTSLIB_VERSION.tar.bz2 && \
+    cd /tmp/htslib-$HTSLIB_VERSION && \
+    make prefix=$HTSLIB_INSTALL && \
+    make prefix=$HTSLIB_INSTALL install && \
+    ln -s $HTSLIB_INSTALL/bin/* /usr/local/bin/ && \
+    rm -rf /tmp/htslib-$HTSLIB_VERSION /tmp/htslib-$HTSLIB_VERSION.tar.bz2
 
 ############
 # bcftools #
@@ -48,8 +65,8 @@ RUN wget https://github.com/samtools/bcftools/releases/download/$BCFTOOLS_VERSIO
   cd /tmp/bcftools-$BCFTOOLS_VERSION && \
   make prefix=$BCFTOOLS_INSTALL_DIR && \
   make prefix=$BCFTOOLS_INSTALL_DIR install && \
-  ln -s $BCFTOOLS_INSTALL_DIR/bin/bcftools /usr/bin/bcftools && \
-  rm -rf /tmp/bcftools-$BCFTOOLS_VERSION
+  ln -s $BCFTOOLS_INSTALL_DIR/bin/bcftools /usr/local/bin/bcftools && \
+  rm -rf /tmp/bcftools-$BCFTOOLS_VERSION /tmp/bcftools-$BCFTOOLS_VERSION.tar.bz2
 
 ############
 # samtools #
@@ -61,8 +78,62 @@ RUN wget https://github.com/samtools/samtools/releases/download/$SAMTOOLS_VERSIO
   cd /tmp/samtools-$SAMTOOLS_VERSION && \
   make prefix=$SAMTOOLS_INSTALL_DIR && \
   make prefix=$SAMTOOLS_INSTALL_DIR install && \
-  ln -s $SAMTOOLS_INSTALL_DIR/bin/samtools /usr/bin/samtools && \
-  rm -rf /tmp/samtools-$SAMTOOLS_VERSION
+  ln -s $SAMTOOLS_INSTALL_DIR/bin/samtools /usr/local/bin/samtools && \
+  rm -rf /tmp/samtools-$SAMTOOLS_VERSION /tmp/samtools-$SAMTOOLS_VERSION.tar.bz2
+
+
+##########
+# picard #
+##########
+ENV PICARD_VERSION=2.23.3
+ENV PICARD_INSTALL=/opt/jars/picard.jar
+RUN wget https://github.com/broadinstitute/picard/releases/download/$PICARD_VERSION/picard.jar && \
+  mv picard.jar $PICARD_INSTALL
+
+#########
+# fgbio #
+#########
+ENV FGBIO_VERSION=1.1.0
+ENV FGBIO_INSTALL=/opt/jars/fgbio.jar
+RUN wget https://github.com/fulcrumgenomics/fgbio/releases/download/$FGBIO_VERSION/fgbio-$FGBIO_VERSION.jar && \
+  mv fgbio-$FGBIO_VERSION.jar $FGBIO_INSTALL
+
+###########
+# bamutil #
+###########
+ENV BAM_UTIL_VERSION=1.0.14
+ENV LIB_STAT_GEN_VERSION=1.0.14
+ENV BAM_UTIL_INSTALL=/opt/BamUtil
+RUN wget https://github.com/statgen/bamUtil/archive/v$BAM_UTIL_VERSION.tar.gz && \
+    tar -zxvf v$BAM_UTIL_VERSION.tar.gz && rm v$BAM_UTIL_VERSION.tar.gz && \
+    wget https://github.com/statgen/libStatGen/archive/v$LIB_STAT_GEN_VERSION.tar.gz && \
+    tar -zxvf v$LIB_STAT_GEN_VERSION.tar.gz && rm v$LIB_STAT_GEN_VERSION.tar.gz && \
+    mv libStatGen-$LIB_STAT_GEN_VERSION libStatGen && \
+    cd bamUtil-$BAM_UTIL_VERSION && \
+    make && \
+    make install INSTALLDIR=$BAM_UTIL_INSTALL && \
+    ln -s $BAM_UTIL_INSTALL/bam /usr/local/bin/BamUtil
+
+##########
+#Cromwell#
+##########
+ENV CROMWELL_VERSION="38-b3ea353"
+ENV CROMWELL_INSTALL=/opt/jars/cromwell.jar
+RUN wget https://github.com/tmooney/cromwell/releases/download/$CROMWELL_VERSION/cromwell-$CROMWELL_VERSION-SNAP.jar \
+    && mv cromwell-$CROMWELL_VERSION-SNAP.jar /opt/cromwell.jar
+
+
+# Define a timezone so Java works properly
+RUN ln -sf /usr/share/zoneinfo/America/Chicago /etc/localtime \
+    && echo "America/Chicago" > /etc/timezone \
+    && dpkg-reconfigure --frontend noninteractive tzdata
+
+
+#################
+# perl packages #
+#################
+RUN cpan install CPAN && \
+  cpan YAML::XS File Cwd Text::CSV JSON
 
 ###################
 # python packages #
@@ -72,57 +143,4 @@ RUN pip3 install --upgrade pip && \
 # default python3
 RUN rm /usr/bin/python && ln -s /usr/bin/python3 /usr/bin/python
 
-##########
-# picard #
-##########
-ENV PICARD_VERSION=2.21.8
-ENV PICARD_INSTALL=/opt/picard.jar
-RUN wget https://github.com/broadinstitute/picard/releases/download/$PICARD_VERSION/picard.jar && \
-  mv picard.jar $PICARD_INSTALL && \
-  ln -s $PICARD_INSTALL /usr/bin/picard && \
-  rm -rf /tmp
-
-#################
-# perl packages #
-#################
-RUN cpan install CPAN && \
-  cpan YAML::XS File Cwd Text::CSV JSON
-
-#########
-# fgbio #
-#########
-ENV FGBIO_VERSION=1.1.0
-ENV FGBIO_INSTALL=/opt/fgbio.jar
-RUN wget https://github.com/fulcrumgenomics/fgbio/releases/download/${FGBIO_VERSION}/fgbio-${FGBIO_VERSION}.jar && \
-  mv fgbio-${FGBIO_VERSION}.jar $FGBIO_INSTALL && \
-  ln -s $FGBIO_INSTALL /usr/bin/fgbio && \
-  rm -rf /tmp
-
-# Define a timezone so Java works properly
-RUN ln -sf /usr/share/zoneinfo/America/Chicago /etc/localtime \
-    && echo "America/Chicago" > /etc/timezone \
-    && dpkg-reconfigure --frontend noninteractive tzdata
-
-# add bamUtil,https://genome.sph.umich.edu/wiki/BamUtil#bamUtil_Overview
-ENV BAM_UTIL_VERSION=1.0.14
-ENV LIB_STAT_GEN_VERSION=1.0.14
-ENV BAM_UTIL_INSTALL=/opt/BamUtil
-RUN wget https://github.com/statgen/bamUtil/archive/v${BAM_UTIL_VERSION}.tar.gz && \
-    tar -zxvf v${BAM_UTIL_VERSION}.tar.gz && rm v${BAM_UTIL_VERSION}.tar.gz && \
-    wget https://github.com/statgen/libStatGen/archive/v${LIB_STAT_GEN_VERSION}.tar.gz && \
-    tar -zxvf v${LIB_STAT_GEN_VERSION}.tar.gz && rm v${LIB_STAT_GEN_VERSION}.tar.gz && \
-    mv libStatGen-${LIB_STAT_GEN_VERSION} libStatGen && \
-    cd bamUtil-${BAM_UTIL_VERSION} && \
-    make && \
-    make install INSTALLDIR=${BAM_UTIL_INSTALL} && \
-    rm -rf /tmp && \
-    ln -s ${BAM_UTIL_INSTALL}/bam /usr/bin/BamUtil
-
-
-WORKDIR /
-
-# r? r packages?
-# cromwell
-# cromwell jar
-# vt?
-# picard
+RUN rm -rf /tmp/*
