@@ -128,6 +128,26 @@ RUN ln -sf /usr/share/zoneinfo/America/Chicago /etc/localtime \
     && echo "America/Chicago" > /etc/timezone \
     && dpkg-reconfigure --frontend noninteractive tzdata
 
+ENV PYTHON_VERSION="3.8.6"
+RUN wget https://www.python.org/ftp/python/$PYTHON_VERSION/Python-$PYTHON_VERSION.tgz \
+  && tar -xf Python-$PYTHON_VERSION.tgz \
+  && cd Python-$PYTHON_VERSION \
+  && gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)" \
+  && ./configure \
+    --build="$gnuArch" \
+    --enable-loadable-sqlite-extensions \
+    --enable-optimizations \
+    --enable-option-checking=fatal \
+    --enable-shared \
+    --with-system-expat \
+    --with-system-ffi \
+    --without-ensurepip \
+  && make -j "$(nproc)" \
+    LDFLAGS="-Wl,--strip-all" \
+  && make install
+
+# default python3
+RUN rm /usr/bin/python && ln -s /usr/bin/python3 /usr/bin/python
 
 #################
 # perl packages #
@@ -148,8 +168,5 @@ RUN pip3 install --upgrade pip && \
   unidecode \
   vcfpy \
   xlsxwriter
-
-# default python3
-RUN rm /usr/bin/python && ln -s /usr/bin/python3 /usr/bin/python
 
 RUN rm -rf /tmp/*
