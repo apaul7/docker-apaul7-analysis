@@ -23,9 +23,8 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
   liblzma-dev \
   nodejs \
   perl \
-  python \
-  python3 \
-  python3-pip \
+  libssl-dev \
+  libffi-dev \
   locales \
   make \
   ncurses-dev \
@@ -135,19 +134,14 @@ RUN wget https://www.python.org/ftp/python/$PYTHON_VERSION/Python-$PYTHON_VERSIO
   && gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)" \
   && ./configure \
     --build="$gnuArch" \
-    --enable-loadable-sqlite-extensions \
     --enable-optimizations \
     --enable-option-checking=fatal \
-    --enable-shared \
-    --with-system-expat \
-    --with-system-ffi \
-    --without-ensurepip \
   && make -j "$(nproc)" \
     LDFLAGS="-Wl,--strip-all" \
   && make install
 
 # default python3
-RUN rm /usr/bin/python && ln -s /usr/bin/python3 /usr/bin/python
+RUN ln -s /usr/bin/python3 /usr/bin/python
 
 #################
 # perl packages #
@@ -163,8 +157,8 @@ RUN pip3 install --upgrade pip && \
   cwltool \
   pysam \
   pyyaml \
-  'ruamel.yaml==0.14.2' \
-  'setuptools>=18.5' \
+  'ruamel.yaml<=0.16.5,>=0.12.4' \
+  setuptools \
   unidecode \
   vcfpy \
   xlsxwriter
