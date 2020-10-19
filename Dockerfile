@@ -163,4 +163,8 @@ RUN pip3 install --upgrade pip && \
   vcfpy \
   xlsxwriter
 
+RUN mkdir /opt/git/ && \
+  cd /opt/git/ && \
+  git clone https://github.com/apaul7/merge-sv-records.git
+
 RUN rm -rf /tmp/*
