@@ -167,4 +167,11 @@ RUN mkdir /opt/git/ && \
   cd /opt/git/ && \
   git clone https://github.com/apaul7/merge-sv-records.git
 
+
+ENV STRLING_VERSION="0.3.0"
+RUN mkdir /opt/bin/ && \
+  cd /opt/bin/ && \
+  wget https://github.com/quinlan-lab/STRling/releases/download/v${STRLING_VERSION}/strling && \
+  chmod +x strling
+
 RUN rm -rf /tmp/*
