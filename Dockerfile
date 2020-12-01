@@ -174,4 +174,10 @@ RUN mkdir /opt/bin/ && \
   wget https://github.com/quinlan-lab/STRling/releases/download/v${STRLING_VERSION}/strling && \
   chmod +x strling
 
+ENV BEDTOOLS_VERSION="2.29.2"
+RUN cd /opt/bin/ && \
+  wget https://github.com/arq5x/bedtools2/releases/download/v${BEDTOOLS_VERSION}/bedtools.static.binary && \
+  mv bedtools.static.binary bedtools && \
+  chmod +x bedtools
+
 RUN rm -rf /tmp/*
