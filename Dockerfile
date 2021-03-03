@@ -179,5 +179,10 @@ RUN cd /usr/local/bin/ && \
   mv bedtools.static.binary bedtools && \
   chmod +x bedtools
 
+ENV SOMALIER_VERSION="0.2.12"
+RUN cd /usr/local/bin/ && \
+  wget https://github.com/brentp/somalier/releases/download/v${SOMALIER_VERSION}/somalier && \
+  chmod +x somalier
+
 RUN rm -rf /tmp/*
 WORKDIR /
