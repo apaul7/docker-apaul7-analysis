@@ -184,5 +184,12 @@ RUN cd /usr/local/bin/ && \
   wget https://github.com/brentp/somalier/releases/download/v${SOMALIER_VERSION}/somalier && \
   chmod +x somalier
 
+ENV SLIVAR_VERSION="0.2.1"
+RUN cd /usr/local/bin && \
+  wget https://github.com/brentp/slivar/releases/download/v${SLIVAR_VERSION}/slivar && \
+  wget https://github.com/brentp/slivar/releases/download/v${SLIVAR_VERSION}/pslivar && \
+  chmod +x slivar && \
+  chmod +x pslivar
+
 RUN rm -rf /tmp/*
 WORKDIR /
