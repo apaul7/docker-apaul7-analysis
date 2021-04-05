@@ -7,6 +7,7 @@ LABEL \
 
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
   apt-utils \
+  bc \
   build-essential \
   bzip2 \
   curl \
