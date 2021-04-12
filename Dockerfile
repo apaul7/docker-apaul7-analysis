@@ -30,7 +30,6 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
   make \
   ncurses-dev \
   rsync \
-  r-base \
   tzdata \
   unzip \
   vim \
@@ -143,7 +142,7 @@ RUN wget https://www.python.org/ftp/python/$PYTHON_VERSION/Python-$PYTHON_VERSIO
   && make install
 
 # default python3
-RUN rm /usr/bin/python && ln -s /usr/bin/python3 /usr/bin/python
+RUN ln -s /usr/bin/python3 /usr/bin/python
 
 #################
 # perl packages #
@@ -159,19 +158,11 @@ RUN pip3 install --upgrade pip && \
   cwltool \
   pysam \
   pyyaml \
-  rpy2 \
   'ruamel.yaml<=0.16.5,>=0.12.4' \
   setuptools \
-  git+git://github.com/nspies/svviz2.git \
   unidecode \
   vcfpy \
   xlsxwriter
-
-# packaging issue with svviz2
-# reinstall genomeview from source:
-# https://github.com/nspies/svviz2/issues/65#issuecomment-644390925
-RUN pip3 install --upgrade --force-reinstall \
-  git+https://github.com/nspies/genomeview.git
 
 RUN mkdir /opt/git/ && \
   cd /opt/git/ && \
