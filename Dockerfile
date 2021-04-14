@@ -157,6 +157,7 @@ RUN pip3 install --upgrade pip && \
   pip install \
   cwltool \
   pysam \
+  PyVCF \
   pyyaml \
   'ruamel.yaml<=0.16.5,>=0.12.4' \
   setuptools \
