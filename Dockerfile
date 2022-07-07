@@ -46,7 +46,7 @@ WORKDIR /tmp
 ##########
 # HTSLIB #
 ##########
-ENV HTSLIB_VERSION=1.10.2
+ENV HTSLIB_VERSION=1.15.1
 ENV HTSLIB_INSTALL=/opt/htslib/
 RUN wget https://github.com/samtools/htslib/releases/download/$HTSLIB_VERSION/htslib-$HTSLIB_VERSION.tar.bz2 && \
     tar --bzip2 -xf htslib-$HTSLIB_VERSION.tar.bz2 && \
@@ -59,7 +59,7 @@ RUN wget https://github.com/samtools/htslib/releases/download/$HTSLIB_VERSION/ht
 ############
 # bcftools #
 ############
-ENV BCFTOOLS_VERSION=1.9
+ENV BCFTOOLS_VERSION=1.15.1
 ENV BCFTOOLS_INSTALL_DIR=/opt/bcftools
 RUN wget https://github.com/samtools/bcftools/releases/download/$BCFTOOLS_VERSION/bcftools-$BCFTOOLS_VERSION.tar.bz2 && \
   tar --bzip2 -xf bcftools-$BCFTOOLS_VERSION.tar.bz2 && \
@@ -72,7 +72,7 @@ RUN wget https://github.com/samtools/bcftools/releases/download/$BCFTOOLS_VERSIO
 ############
 # samtools #
 ############
-ENV SAMTOOLS_VERSION=1.9
+ENV SAMTOOLS_VERSION=1.15.1
 ENV SAMTOOLS_INSTALL_DIR=/opt/samtools
 RUN wget https://github.com/samtools/samtools/releases/download/$SAMTOOLS_VERSION/samtools-$SAMTOOLS_VERSION.tar.bz2 && \
   tar --bzip2 -xf samtools-$SAMTOOLS_VERSION.tar.bz2 && \
@@ -86,7 +86,7 @@ RUN wget https://github.com/samtools/samtools/releases/download/$SAMTOOLS_VERSIO
 ##########
 # picard #
 ##########
-ENV PICARD_VERSION=2.23.3
+ENV PICARD_VERSION=2.27.4
 ENV PICARD_INSTALL=/opt/jars/picard.jar
 RUN wget https://github.com/broadinstitute/picard/releases/download/$PICARD_VERSION/picard.jar && \
   mv picard.jar $PICARD_INSTALL
@@ -94,7 +94,7 @@ RUN wget https://github.com/broadinstitute/picard/releases/download/$PICARD_VERS
 #########
 # fgbio #
 #########
-ENV FGBIO_VERSION=1.1.0
+ENV FGBIO_VERSION=2.0.2
 ENV FGBIO_INSTALL=/opt/jars/fgbio.jar
 RUN wget https://github.com/fulcrumgenomics/fgbio/releases/download/$FGBIO_VERSION/fgbio-$FGBIO_VERSION.jar && \
   mv fgbio-$FGBIO_VERSION.jar $FGBIO_INSTALL
@@ -102,7 +102,7 @@ RUN wget https://github.com/fulcrumgenomics/fgbio/releases/download/$FGBIO_VERSI
 ###########
 # bamutil #
 ###########
-ENV BAM_UTIL_VERSION=1.0.14
+ENV BAM_UTIL_VERSION=1.0.15
 ENV LIB_STAT_GEN_VERSION=1.0.14
 ENV BAM_UTIL_INSTALL=/opt/BamUtil
 RUN wget https://github.com/statgen/bamUtil/archive/v$BAM_UTIL_VERSION.tar.gz && \
@@ -176,18 +176,18 @@ RUN cd /usr/local/bin/ && \
   wget https://github.com/quinlan-lab/STRling/releases/download/v${STRLING_VERSION}/strling && \
   chmod +x strling
 
-ENV BEDTOOLS_VERSION="2.29.2"
+ENV BEDTOOLS_VERSION="2.30.0"
 RUN cd /usr/local/bin/ && \
   wget https://github.com/arq5x/bedtools2/releases/download/v${BEDTOOLS_VERSION}/bedtools.static.binary && \
   mv bedtools.static.binary bedtools && \
   chmod +x bedtools
 
-ENV SOMALIER_VERSION="0.2.12"
+ENV SOMALIER_VERSION="0.2.14"
 RUN cd /usr/local/bin/ && \
   wget https://github.com/brentp/somalier/releases/download/v${SOMALIER_VERSION}/somalier && \
   chmod +x somalier
 
-ENV SLIVAR_VERSION="0.2.1"
+ENV SLIVAR_VERSION="0.2.6"
 RUN cd /usr/local/bin && \
   wget https://github.com/brentp/slivar/releases/download/v${SLIVAR_VERSION}/slivar && \
   wget https://github.com/brentp/slivar/releases/download/v${SLIVAR_VERSION}/pslivar && \
