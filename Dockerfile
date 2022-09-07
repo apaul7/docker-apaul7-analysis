@@ -21,8 +21,9 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
   libbz2-dev \
   libcurl4-openssl-dev \
   libevent-dev \
-  libncurses5-dev \
   liblzma-dev \
+  libncurses5-dev \
+  libsqlite3-dev \
   nodejs \
   perl \
   libssl-dev \
@@ -156,6 +157,7 @@ RUN cpan install CPAN && \
 ###################
 RUN pip3 install --upgrade pip && \
   pip install \
+  biopython \
   cwltool \
   pysam \
   PyVCF \
