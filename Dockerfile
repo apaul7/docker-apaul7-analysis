@@ -159,13 +159,22 @@ RUN pip3 install --upgrade pip && \
   pip install \
   biopython \
   cwltool \
+  fastparquet \
+  joblib \
+  jupyter \
+  matplotlib \
+  pandas \
+  pyarrow \
   pysam \
   PyVCF3 \
   pyyaml \
   'ruamel.yaml<=0.16.5,>=0.12.4' \
+  scikit-learn \
   setuptools \
+  shap \
   unidecode \
   vcfpy \
+  xgboost \
   xlsx2csv \
   xlsxwriter
 
