@@ -1,9 +1,9 @@
 FROM ubuntu:20.04
-MAINTAINER Alexander Paul <alex.paul@wustl.edu>
 
 LABEL \
   version="1.0.0" \
-  description="Image for interactive analysis"
+  description="Image for interactive analysis" \
+  maintainer="Alexander Paul <alex.paul@wustl.edu>"
 
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
   apt-utils \
