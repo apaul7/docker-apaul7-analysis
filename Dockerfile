@@ -150,7 +150,14 @@ RUN ln -s /usr/bin/python3 /usr/bin/python
 # perl packages #
 #################
 RUN cpan install CPAN && \
-  cpan YAML::XS File Cwd Text::CSV JSON
+  cpan \
+  Cwd \
+  Excel::Writer::XLSX \
+  File \
+  JSON \
+  Sort::Key::Natural \
+  Text::CSV \
+  YAML::XS
 
 ###################
 # python packages #
