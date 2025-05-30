@@ -212,5 +212,14 @@ RUN cd /usr/local/bin && \
   chmod +x slivar && \
   chmod +x pslivar
 
+ENV NODE_VERSION="v16.9.1"
+ENV NODE_INSTALL_DIR=/opt/node
+RUN cd /tmp && \
+  curl -fsSL https://nodejs.org/dist/${NODE_VERSION}/node-${NODE_VERSION}-linux-x64.tar.gz -o node-${NODE_VERSION}-linux-x64.tar.gz && \
+  tar -xzvf node-${NODE_VERSION}-linux-x64.tar.gz && \
+  rm node-${NODE_VERSION}-linux-x64.tar.gz && \
+  mv node-${NODE_VERSION}-linux-x64 $NODE_INSTALL_DIR && \
+  ln -s $NODE_INSTALL_DIR/bin/* /usr/local/bin/
+
 RUN rm -rf /tmp/*
 WORKDIR /
