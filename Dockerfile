@@ -179,6 +179,7 @@ RUN pip3 install --upgrade pip && \
   scikit-learn \
   setuptools \
   shap \
+  umi_tools \
   unidecode \
   vcfpy \
   xgboost \
