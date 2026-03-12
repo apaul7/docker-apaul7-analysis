@@ -119,7 +119,7 @@ RUN wget https://github.com/fulcrumgenomics/fgbio/releases/download/$FGBIO_VERSI
 ##########
 #Cromwell#
 ##########
-ENV CROMWELL_VERSION="38-b3ea353"
+ENV CROMWELL_VERSION="52-ffb7fd4"
 ENV CROMWELL_INSTALL=/opt/jars/cromwell.jar
 RUN wget https://github.com/tmooney/cromwell/releases/download/$CROMWELL_VERSION/cromwell-$CROMWELL_VERSION-SNAP.jar \
     && mv cromwell-$CROMWELL_VERSION-SNAP.jar /opt/cromwell.jar
@@ -221,6 +221,11 @@ RUN cd /tmp && \
   rm node-${NODE_VERSION}-linux-x64.tar.gz && \
   mv node-${NODE_VERSION}-linux-x64 $NODE_INSTALL_DIR && \
   ln -s $NODE_INSTALL_DIR/bin/* /usr/local/bin/
+
+ENV MOSDEPTH_VERSION="0.3.11"
+RUN cd /usr/local/bin/ && \
+  wget https://github.com/brentp/mosdepth/releases/download/v${MOSDEPTH_VERSION}/mosdepth && \
+  chmod +x mosdepth
 
 RUN rm -rf /tmp/*
 WORKDIR /
