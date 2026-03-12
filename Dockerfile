@@ -130,7 +130,7 @@ RUN ln -sf /usr/share/zoneinfo/America/Chicago /etc/localtime \
     && echo "America/Chicago" > /etc/timezone \
     && dpkg-reconfigure --frontend noninteractive tzdata
 
-ENV PYTHON_VERSION="3.8.6"
+ENV PYTHON_VERSION="3.8.20"
 RUN wget https://www.python.org/ftp/python/$PYTHON_VERSION/Python-$PYTHON_VERSION.tgz \
   && tar -xf Python-$PYTHON_VERSION.tgz \
   && cd Python-$PYTHON_VERSION \
@@ -179,6 +179,7 @@ RUN pip3 install --upgrade pip && \
   scikit-learn \
   setuptools \
   shap \
+  tqdm \
   umi_tools \
   unidecode \
   vcfpy \
