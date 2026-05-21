@@ -163,7 +163,7 @@ RUN cpan install CPAN && \
 # python packages #
 ###################
 RUN pip3 install --upgrade pip && \
-  pip install \
+  pip install -U \
   biopython \
   cwltool \
   fastparquet \
