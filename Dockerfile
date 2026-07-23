@@ -228,5 +228,11 @@ RUN cd /usr/local/bin/ && \
   wget https://github.com/brentp/mosdepth/releases/download/v${MOSDEPTH_VERSION}/mosdepth && \
   chmod +x mosdepth
 
+ENV VCFANNO_VERSION="0.3.9"
+RUN cd /usr/local/bin/ && \
+  wget https://github.com/brentp/vcfanno/releases/download/v${VCFANNO_VERSION}/vcfanno_linux64 && \
+  mv vcfanno_linux64 vcfanno && \
+  chmod +x vcfanno
+
 RUN rm -rf /tmp/*
 WORKDIR /
